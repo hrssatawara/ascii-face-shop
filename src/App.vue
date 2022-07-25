@@ -2,8 +2,11 @@
   <main id="app">
     <div class="container">
       <div class="row">
-        <div class="col-12 text-center">
+        <div class="col-8 text-center">
           <h4 class="pt-3">Our Products</h4>
+        </div>
+        <div class="col-4">
+          <b-form-select v-model="sort" :options="sortingOptions"></b-form-select>
         </div>
       </div>
       <div class="row" v-if="loading">
@@ -39,7 +42,13 @@ export default {
     return{
       baseURL: 'http://localhost:3000/',
       loading: false,
-      products: []
+      products: [],
+      sort:'price',
+      sortingOptions: [
+        {value:'price' , text:'Price'},
+        {value:'size' , text:'Size '},
+        {value:'id' , text:'Id'},
+      ],
     }
   },
   created(){
@@ -47,8 +56,12 @@ export default {
   },
   methods : {
     async fetchProducts(){
+      const params= {
+        _sort:this.sort
+      };
       this.loading = true;
-      await window.axios.get(this.baseURL + "products/")
+      // this.products = [];
+      await window.axios.get(`${this.baseURL}products/`,{params})
             .then(res => {
                 this.products = res.data;
                 this.loading = false;
@@ -58,6 +71,11 @@ export default {
               console.log(err,'ghgh');
             })
             .then(()=>{this.loading = false;});
+    }
+  },
+  watch:{
+    sort(){
+      this.fetchProducts();
     }
   }
 }
