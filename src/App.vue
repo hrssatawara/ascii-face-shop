@@ -60,8 +60,6 @@ export default {
             .then(res => {
               if (res.data.length) {
                 this.page += 1;
-                const date = res.data[1].date;
-                console.log(new Date(date));
                 this.products.push(...res.data);
                 $state.loaded();
               } else {
@@ -70,7 +68,6 @@ export default {
             })
             .catch(err => {
               this.loading = false;
-              console.log(err,'ghgh');
             })
             .then(()=>{this.loading = false;});
     }
