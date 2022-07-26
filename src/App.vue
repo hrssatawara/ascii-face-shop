@@ -10,14 +10,7 @@
           <b-form-select v-model="sort" :options="sortingOptions"></b-form-select>
         </div>
       </div>
-      <div class="row" v-if="loading">
-        <div class=" col-6 mx-auto  ">
-          <div class="align-items-center">
-            <b-spinner class="ml-auto"></b-spinner>
-          </div>
-        </div>
-      </div>
-      <div class="row" v-if="products" >
+      <div class="row">
         <ProductItem
           v-for="product in products"
           :key="product.id"
@@ -25,9 +18,9 @@
           class="col-md-6 col-xl-4 col-12 pt-3  justify-content-around d-flex"
         />
       </div>
-      <div class="row" v-else >
-        <b-alert show variant="secondary">Sorry! No products found.</b-alert>
-      </div>
+      <infinite-loading spinner="waveDots" :identifier="infiniteId" @infinite="fetchProducts">
+        <div slot="no-more">End of catalogue :)</div>
+      </infinite-loading>
     </div>
   </main>
 </template>
@@ -42,30 +35,38 @@ export default {
   data(){
     return{
       baseURL: 'http://localhost:3000/',
-      loading: false,
       products: [],
       sort:'price',
+      page: 1,
+      limit: 15,
       sortingOptions: [
         {value:'size' , text:'Size'},
         {value:'price' , text:'Price'},
         {value:'id' , text:'Id'},
       ],
+      infiniteId: +new Date(),
     }
   },
-  created(){
-    this.fetchProducts();
-  },
+  created(){},
   methods : {
-    async fetchProducts(){
+    async fetchProducts($state){
       const params= {
-        _sort:this.sort
+        _page:this.page,
+        _sort:this.sort,
+        _limit:this.limit
       };
       this.loading = true;
-      // this.products = [];
       await window.axios.get(`${this.baseURL}products/`,{params})
             .then(res => {
-                this.products = res.data;
-                this.loading = false;
+              if (res.data.length) {
+                this.page += 1;
+                const date = res.data[1].date;
+                console.log(new Date(date));
+                this.products.push(...res.data);
+                $state.loaded();
+              } else {
+                $state.complete();
+              }
             })
             .catch(err => {
               this.loading = false;
@@ -76,7 +77,9 @@ export default {
   },
   watch:{
     sort(){
-      this.fetchProducts();
+      this.page = 1;
+      this.products = [];
+      this.infiniteId += 1;
     }
   }
 }
