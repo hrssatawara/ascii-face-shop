@@ -6,6 +6,7 @@
           <h4 class="pt-3">Our Products</h4>
         </div>
         <div class="col-4">
+          Sort By 
           <b-form-select v-model="sort" :options="sortingOptions"></b-form-select>
         </div>
       </div>
@@ -45,8 +46,8 @@ export default {
       products: [],
       sort:'price',
       sortingOptions: [
+        {value:'size' , text:'Size'},
         {value:'price' , text:'Price'},
-        {value:'size' , text:'Size '},
         {value:'id' , text:'Id'},
       ],
     }
