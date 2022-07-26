@@ -12,11 +12,13 @@
       </div>
       <div class="row">
         <ProductItem
-          v-for="product in products"
+          v-for="(product,index) in products"
           :key="product.id"
+          :index="index"
           :product="product"
-          class="col-md-6 col-xl-4 col-12 pt-3  justify-content-around d-flex"
+          :baseURL="baseURL"
         />
+        <!-- <random-ads :baseURL="baseURL"/> -->
       </div>
       <infinite-loading spinner="waveDots" :identifier="infiniteId" @infinite="fetchProducts">
         <div slot="no-more">End of catalogue :)</div>
@@ -31,7 +33,9 @@ import ProductItem from './components/ProductItem';
 
 export default {
   name: 'App',
-  components: { ProductItem},
+  components: { 
+    ProductItem
+    },
   data(){
     return{
       baseURL: 'http://localhost:3000/',
@@ -67,9 +71,8 @@ export default {
               }
             })
             .catch(err => {
-              this.loading = false;
-            })
-            .then(()=>{this.loading = false;});
+              console.log(err);
+            });
     }
   },
   watch:{
