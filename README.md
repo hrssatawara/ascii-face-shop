@@ -6,6 +6,8 @@ You can also download `vue-test` by [click here.](https://github.com/hrssatawara
 
 In that repository there is steps to start.
 
+You can review full functionality video from [here](https://github.com/hrssatawara/ascii-face-shop/pull/4#issue-1318736929)
+
 ## Project setup
 ```
 npm install
