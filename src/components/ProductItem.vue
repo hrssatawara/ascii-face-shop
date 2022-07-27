@@ -8,7 +8,6 @@
             <p class="card-text font-italic">
             {{ `Last updated ${formateDate(product.date)}` }}
             </p>
-            <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
         </div>
         <div v-if="everyTwenty" class="col-md-6  col-xl-4 col-12 pt-3  justify-content-around d-flex">
             <random-ads :baseURL="baseURL"/>

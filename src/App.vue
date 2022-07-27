@@ -18,7 +18,6 @@
           :product="product"
           :baseURL="baseURL"
         />
-        <!-- <random-ads :baseURL="baseURL"/> -->
       </div>
       <infinite-loading spinner="waveDots" :identifier="infiniteId" @infinite="fetchProducts">
         <div slot="no-more">End of catalogue :)</div>
